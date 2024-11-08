@@ -1,6 +1,5 @@
 .tile{
     border-radius: 10px;
-    border: 1px solid black;
     text-wrap: wrap;
     text-align: center;
     opacity: 80%;
@@ -19,4 +18,6 @@ h2{
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
+    align-content: center;
+    row-gap: 0%;
 }

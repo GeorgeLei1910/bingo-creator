@@ -1,5 +1,6 @@
 import "./bingo-card.css";
 import "../App.css";
+import { useState } from "react";
 
 const minTiles = {
   3: 9,
@@ -7,14 +8,24 @@ const minTiles = {
   5: 24,
 };
 
-const BingoTile = ({ tileName, formData }) => {
-  const size = 600.0 / formData.gridSize - 2;
+const BingoTile = ({ idx, tileName, formData }) => {
+  const size = 600.0 / formData.gridSize;
+
+  const [selected, setSelected] = useState(false);
+
+  const x = idx / formData.gridSize;
+  const y = idx % formData.gridSize;
+
+  const handleOnClick = (e) => {
+    setSelected(!selected);
+  } 
   return (
     <div
       class="tile"
-      style={{ width: size , height: size}}
+      style={{ width: size , height: size, background: selected ? 'limegreen' : 'white'}}
+      onClick={handleOnClick}
     >
-      <h3 style={{ fontSize: "100%", color: formData.fontColor}}>{tileName}</h3> 
+      <h3 style={{ fontSize: '100%', color: formData.fontColor}}>{tileName}</h3> 
     </div>
   );
 };
@@ -40,7 +51,7 @@ const BingoCard = ({ formData }) => {
         {selected.map((tile, idx) => (
           <>
             <BingoTile tileName={tile} formData={formData}></BingoTile>
-            {formData.gridSize == 5 && idx === 11 && <BingoTile tileName={"FREE SPACE"} formData={formData}></BingoTile>}
+            {formData.gridSize == 5 && idx === 11 && <BingoTile idx={idx} tileName={"FREE SPACE"} formData={formData}></BingoTile>}
           </>
         ))}
       </div>
