@@ -34,7 +34,7 @@ const BingoCard = ({ formData }) => {
   if (!formData) return;
   let tiles = [];
   if (formData.description) {
-    tiles = formData.description.split(new RegExp("\n\n+"));
+    tiles = formData.description;
   }
   const noTiles = minTiles[formData.gridSize];
   if (noTiles > tiles.length) {

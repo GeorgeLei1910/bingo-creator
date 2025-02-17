@@ -52,6 +52,13 @@ const BingoForm = ({ setMainForm }) => {
     }
   };
 
+  const removeDescription = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      description: prev.description.filter((_, i) => i !== index) // Remove by index
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setMainForm({...formData});
@@ -133,7 +140,9 @@ const BingoForm = ({ setMainForm }) => {
             <label>Description List:</label>
             <ul style={{ paddingLeft: '20px' }}>
               {formData.description.map((desc, index) => (
-                <li key={index}>{desc}</li>
+                <li 
+                  key={index}
+                  onClick={() => removeDescription(index)}>{desc}</li>
               ))}
             </ul>
           </div>
