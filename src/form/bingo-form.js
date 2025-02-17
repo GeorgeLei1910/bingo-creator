@@ -1,6 +1,6 @@
 import React from "react";
 import "./bingo-form.css";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const BingoForm = ({ setMainForm }) => {
   const [formData, setFormData] = useState({
@@ -10,8 +10,16 @@ const BingoForm = ({ setMainForm }) => {
     fontColor: "#000000",
     backgroundImage: null,
   });
-
   const [descriptionInput, setDescriptionInput] = useState('');
+  const textareaRef = useRef(null);
+
+  // Auto-resize the textarea when content changes
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto'; // Reset height
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Set new height
+    }
+  }, [descriptionInput]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -42,12 +50,18 @@ const BingoForm = ({ setMainForm }) => {
     const handleDescriptionKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault(); // Prevent form submission
-      if (descriptionInput.trim()) {
+      if (e.shiftKey){
+        setDescriptionInput((prev) => prev + '\n');
+      } else {
+        const newDesc = descriptionInput
+        .split('\n')
+        .map((line) => line.trim())
+        .filter((line) => line !== '');
         setFormData((prev) => ({
           ...prev,
-          description: [...prev.description, descriptionInput] // 👈 Append to array
+          description: [...prev.description, ...newDesc] 
         }));
-        setDescriptionInput(''); // Clear input after adding
+        setDescriptionInput(''); 
       }
     }
   };
@@ -62,6 +76,7 @@ const BingoForm = ({ setMainForm }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setMainForm({...formData});
+    setDescriptionInput('');
   };
 
   return (
@@ -122,30 +137,32 @@ const BingoForm = ({ setMainForm }) => {
 
         {/* Description Input Field */}
         <div style={{ marginBottom: '1rem' }}>
-          <label htmlFor="description">Add to Description:</label>
-          <input
-            type="text"
+        <label htmlFor="description">Add to Description:</label>
+        <div >
+          <textarea
             id="description"
-            placeholder="Type and press Enter"
+            placeholder="Type and press Enter to add, Shift + Enter for new line"
             value={descriptionInput}
             onChange={handleDescriptionChange}
             onKeyDown={handleDescriptionKeyDown} // Handles Enter key
-            style={{ width: '100%' }}
+            ref={textareaRef}
           />
-        </div>
+        </div></div>
 
         {/* Description List Below Input */}
         {formData.description.length > 0 && (
-          <div style={{ marginBottom: '1rem' }}>
-            <label>Description List:</label>
-            <ul style={{ paddingLeft: '20px' }}>
-              {formData.description.map((desc, index) => (
-                <li 
-                  key={index}
-                  onClick={() => removeDescription(index)}>{desc}</li>
-              ))}
-            </ul>
+          <div>
+          <label>Bingo Options</label>
+          <div class="options-list" style={{ marginBottom: '1rem' }}>
+            {formData.description.map((desc, index) => (
+              <div 
+                class="option-item"
+                key={index}
+                onClick={() => removeDescription(index)}>{desc}</div>
+            ))}
           </div>
+          </div>
+
         )}
 
         {/* Font Color Selector */}
