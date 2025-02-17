@@ -6,10 +6,12 @@ const BingoForm = ({ setMainForm }) => {
   const [formData, setFormData] = useState({
     name: "",
     gridSize: "3",
-    description: "",
+    description: [],
     fontColor: "#000000",
     backgroundImage: null,
   });
+
+  const [descriptionInput, setDescriptionInput] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -17,6 +19,10 @@ const BingoForm = ({ setMainForm }) => {
       ...formData,
       [name]: value,
     });
+  };
+
+  const handleDescriptionChange = (e) => {
+    setDescriptionInput(e.target.value);
   };
 
   const handleFileChange = (e) => {
@@ -31,6 +37,19 @@ const BingoForm = ({ setMainForm }) => {
             backgroundImage: this.result,
           });
       }
+  };
+
+    const handleDescriptionKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // Prevent form submission
+      if (descriptionInput.trim()) {
+        setFormData((prev) => ({
+          ...prev,
+          description: [...prev.description, descriptionInput] // 👈 Append to array
+        }));
+        setDescriptionInput(''); // Clear input after adding
+      }
+    }
   };
 
   const handleSubmit = (e) => {
@@ -94,18 +113,31 @@ const BingoForm = ({ setMainForm }) => {
           </div>
         </div>
 
-        {/* Description Text Area */}
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="description">Description:</label>
-          <textarea
+        {/* Description Input Field */}
+        <div style={{ marginBottom: '1rem' }}>
+          <label htmlFor="description">Add to Description:</label>
+          <input
+            type="text"
             id="description"
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            rows="15"
-            style={{ width: "400px" }}
-          ></textarea>
+            placeholder="Type and press Enter"
+            value={descriptionInput}
+            onChange={handleDescriptionChange}
+            onKeyDown={handleDescriptionKeyDown} // Handles Enter key
+            style={{ width: '100%' }}
+          />
         </div>
+
+        {/* Description List Below Input */}
+        {formData.description.length > 0 && (
+          <div style={{ marginBottom: '1rem' }}>
+            <label>Description List:</label>
+            <ul style={{ paddingLeft: '20px' }}>
+              {formData.description.map((desc, index) => (
+                <li key={index}>{desc}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {/* Font Color Selector */}
         <div style={{ marginBottom: "1rem" }}>
