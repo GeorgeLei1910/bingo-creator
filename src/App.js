@@ -9,7 +9,7 @@ function App() {
   return (
     <div class="main">
       <BingoForm setMainForm={setFormData}></BingoForm>
-      <BingoCard formData={formData}></BingoCard>
+      { formData.description && <BingoCard formData={formData}></BingoCard>}
     </div>
   );
 }

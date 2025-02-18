@@ -41,6 +41,7 @@ const BingoForm = ({ setMainForm }) => {
 
   return (
     <div class="bingo-cell">
+      <h2>myobingo.ca</h2>
       <form
         onSubmit={handleSubmit}
         style={{ maxWidth: "400px", margin: "0 auto" }}

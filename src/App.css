@@ -16,3 +16,8 @@
 #id{
   padding: 20px;
 }
+
+.tile{
+  word-wrap: break-word;
+  padding: auto 10px;
+}
