@@ -21,22 +21,28 @@ const BingoForm = ({ setMainForm }) => {
   };
 
   const handleFileChange = (e) => {
-
     const file = e.target.files[0];
     if (file == null) return;
-        var reader = new FileReader();        
-        reader.readAsDataURL( file );
-        reader.onloadend = function(){
-          setFormData({
-            ...formData,
-            backgroundImage: this.result,
-          });
-      }
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = function () {
+      setFormData({
+        ...formData,
+        backgroundImage: this.result,
+      });
+    };
+  };
+
+  const handleGridSizeChange = (size) => {
+    setFormData((prev) => ({
+      ...prev,
+      gridSize: size
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setMainForm({...formData});
+    setMainForm({ ...formData });
   };
 
   return (
@@ -62,41 +68,30 @@ const BingoForm = ({ setMainForm }) => {
         {/* Grid Size Radio Buttons */}
         <div style={{ marginBottom: "1rem" }}>
           <label>Grid Size:</label>
-          <div>
-            <label>
-              <input
-                type="radio"
-                name="gridSize"
-                value="3"
-                checked={formData.gridSize === "3"}
-                onChange={handleInputChange}
-              />
-              3 x 3
-            </label>
-            <label style={{ marginLeft: "1rem" }}>
-              <input
-                type="radio"
-                name="gridSize"
-                value="4"
-                checked={formData.gridSize === "4"}
-                onChange={handleInputChange}
-              />
-              4 x 4
-            </label>
-            <label style={{ marginLeft: "1rem" }}>
-              <input
-                type="radio"
-                name="gridSize"
-                value="5"
-                checked={formData.gridSize === "5"}
-                onChange={handleInputChange}
-              />
-              5 x 5
-            </label>
+          <div style={{ display: "flex", gap: "10px" }}>
+            {[3, 4, 5].map((size) => (
+              <button
+                key={size}
+                type="button"
+                onClick={() => handleGridSizeChange(size)}
+                style={{
+                  padding: "8px 12px",
+                  border: "2px solid",
+                  borderColor: formData.gridSize === size ? "blue" : "gray",
+                  background:
+                    formData.gridSize === size ? "lightblue" : "white",
+                  cursor: "pointer",
+                }}>
+                {size} x {size}
+              </button>
+            ))}
           </div>
         </div>
 
-        <BingoOptions formData={formData} setFormData={setFormData}></BingoOptions>
+        <BingoOptions
+          formData={formData}
+          setFormData={setFormData}
+        ></BingoOptions>
 
         {/* Font Color Selector */}
         <div style={{ marginBottom: "1rem" }}>
