@@ -12,6 +12,8 @@ const BingoForm = ({ setMainForm }) => {
     backgroundImage: null,
   });
 
+  const [tileOptions, setTileOptions] = useState("Numbers");
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -36,13 +38,13 @@ const BingoForm = ({ setMainForm }) => {
   const handleGridSizeChange = (size) => {
     setFormData((prev) => ({
       ...prev,
-      gridSize: size
+      gridSize: size,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setMainForm({ ...formData });
+    setMainForm({ ...formData, description: tileOptions === "Custom" ? formData.description : Array.from({ length: 100 }, (_, index) => index + 1) });
   };
 
   return (
@@ -81,17 +83,44 @@ const BingoForm = ({ setMainForm }) => {
                   background:
                     formData.gridSize === size ? "lightblue" : "white",
                   cursor: "pointer",
-                }}>
+                }}
+              >
                 {size} x {size}
               </button>
             ))}
           </div>
         </div>
 
-        <BingoOptions
-          formData={formData}
-          setFormData={setFormData}
-        ></BingoOptions>
+        {/* Bingo Options Radio Buttons */}
+        <div style={{ marginBottom: "1rem" }}>
+          <label>Tile Options:</label>
+          <div style={{ display: "flex", gap: "10px" }}>
+            {["Numbers", "Custom"].map((option) => (
+              <button
+                key={option}
+                type="button"
+                onClick={() => setTileOptions(option)}
+                style={{
+                  padding: "8px 12px",
+                  border: "2px solid",
+                  borderColor: tileOptions === option ? "blue" : "gray",
+                  background:
+                    tileOptions === option ? "lightblue" : "white",
+                  cursor: "pointer",
+                }}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {tileOptions === "Custom" && (
+          <BingoOptions
+            formData={formData}
+            setFormData={setFormData}
+          ></BingoOptions>
+        )}
 
         {/* Font Color Selector */}
         <div style={{ marginBottom: "1rem" }}>
