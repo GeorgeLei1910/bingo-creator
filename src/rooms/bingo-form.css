@@ -1,0 +1,35 @@
+label{
+    font-size: 24px;
+    margin: 0;
+}
+
+.options-list{
+    display: flex;
+    flex-wrap: wrap;
+    flex-flow: wrap;
+}
+
+.option-item{
+    min-width: 50px;
+    min-height: 20px;
+    border-radius: 10px;
+    box-shadow: 5px;
+    margin: 5px 0;
+    padding: 10px;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.option-item:hover{
+    background-color: red;
+    color: white;
+}
+
+textarea{
+    width: 100%;
+    resize: none;
+    overflow: hidden;
+    min-height: 40px;
+    line-height: 1.5;
+}
+
