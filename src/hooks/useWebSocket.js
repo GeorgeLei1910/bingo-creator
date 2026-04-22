@@ -9,7 +9,6 @@ export function useWebSocket() {
     wsManager.connect();
     return () => {
       wsManager.onStatusChange = null;
-      wsManager.disconnect();
     };
   }, []);
 

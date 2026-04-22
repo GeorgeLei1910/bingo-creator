@@ -1,23 +1,26 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { wsManager } from "../lib/web-socket-provider";
 import { useWebSocket } from "../hooks/useWebSocket";
+import { wsManager } from "../lib/web-socket-provider";
 import Header from "./header";
 
 export default function CreateRoomPage() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
+  const [waiting, setWaiting] = useState(false); // ← track if we sent a request
 
-  const { status, send } = useWebSocket();
+  const { status, send} = useWebSocket();
 
   useEffect(() => {
-    const unsubRoom = wsManager.on("roomCreated", ({ roomCode }) => {
-      console.log("Room:", roomCode);
-      navigate(`/${roomCode}`);
+    const unsub = wsManager.on('roomCreated', ({roomId}) => {
+      if (!waiting) return;
+      if (roomId) {
+        navigate(`/${roomId}`);
+      }
     });
-
-    return () => unsubRoom();
-  }, []);
+  
+    return () => unsub();
+  }, [waiting]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -25,9 +28,10 @@ export default function CreateRoomPage() {
       console.error("Set REACT_APP_WS_URL in .env");
       return;
     }
-
-    send("createRoom", { hostName: name });
+    setWaiting(true); // ← flag that we're expecting a response
+    send("createRoom", { playerName: name });
   }
+
 
   return (
     <div className="app-shell">
@@ -46,6 +50,7 @@ export default function CreateRoomPage() {
           </label>
           <button type="submit">Create and go to room</button>
         </form>
+        {waiting && <p>waiting</p>}
       </main>
     </div>
   );
