@@ -1,55 +1,37 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-
-
-
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { wsManager } from "../lib/web-socket-provider";
+import { useWebSocket } from "../hooks/useWebSocket";
+import Header from "./header";
 
 export default function CreateRoomPage() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
 
-  const url = process.env.MYOBINGO_WS_DEV;
+  const { status, send } = useWebSocket();
+
+  useEffect(() => {
+    const unsubRoom = wsManager.on("roomCreated", ({ roomCode }) => {
+      console.log("Room:", roomCode);
+      navigate(`/${roomCode}`);
+    });
+
+    return () => unsubRoom();
+  }, []);
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!url) {
+    if (!process.env.REACT_APP_WS_URL) {
       console.error("Set REACT_APP_WS_URL in .env");
       return;
     }
-  
-    const ws = new WebSocket(url);
-  
-    ws.onopen = () => {
-      ws.send(
-        JSON.stringify({
-          action: "createRoom",
-          name: name,
-        })
-      );
-    };
-  
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      // adjust keys to match your backend
-      if (data.roomId) {
-        navigate(`/${data.roomId}`, { replace: true, state: { hostName: name } });
-      }
-      ws.close();
-    };
-  
-    ws.onerror = () => {
-      // show error to user
-      ws.close();
-    };
+
+    send("createRoom", { hostName: name });
   }
 
   return (
     <div className="app-shell">
-      <nav className="app-nav">
-        <Link to="/">Home</Link>
-        <Link to="/create-room">Create room</Link>
-        <Link to="/join-room">Join room</Link>
-      </nav>
+      <Header />
       <main className="room-page">
         <h1>Create room</h1>
         <form onSubmit={handleSubmit} className="room-form">

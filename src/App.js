@@ -1,17 +1,20 @@
 import "./App.css";
-import BingoForm from "./form/bingo-form";
-import BingoCard from "./form/bingo-card";
-import { useState } from 'react';
+import Homepage from "./rooms/homepage";
+import BingoCreator from "./rooms/bingo-creator";
+import CreateRoom from "./rooms/create-room";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
-  const [formData, setFormData] = useState({});
-
   return (
-    <div class="main">
-      <BingoForm setMainForm={setFormData}></BingoForm>
-      { formData.description && <BingoCard formData={formData}></BingoCard>}
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/create-room" element={<CreateRoom />} />
+        {/* <Route path="/join-room" element={<JoinRoom />} /> */}
+        <Route path="/bingo-creator" element={<BingoCreator />} />
+        {/* <Route path="/:roomId" element={<Room />} /> */}
+      </Routes>
+    </BrowserRouter>
   );
 }
-
 export default App;

@@ -1,0 +1,24 @@
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 24px; /* or whatever */
+  margin: 24px;
+}
+.header > a {
+  z-index: 1; /* stays clickable above the centered title area */
+
+  img {
+    color: black;
+  }
+}
+.header > h1 {
+  position: absolute;
+  font-size: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  text-align: center;
+  pointer-events: none; /* clicks pass through to nothing; optional */
+  max-width: 70%; /* optional: reduce overlap with the icon on small widths */
+}

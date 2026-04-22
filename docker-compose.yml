@@ -1,0 +1,9 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_WS_URL: ${REACT_APP_WS_URL}
+    ports:
+      - "8080:80"

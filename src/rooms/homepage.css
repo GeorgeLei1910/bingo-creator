@@ -1,0 +1,28 @@
+.homepage {
+  display: block;
+  text-align: center;
+}
+
+.button-array {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* or stretch + width on .button */
+  gap: 0.75rem;
+}
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid;
+  border-radius: 10px;
+  min-width: 200px; /* optional: consistent width */
+  width: 100%;
+  max-width: 280px; /* optional: cap width on large screens */
+  height: 50px;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.button:hover{
+    background-color: lime;
+}

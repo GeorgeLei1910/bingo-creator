@@ -1,0 +1,24 @@
+.tile{
+    border-radius: 10px;
+    text-wrap: wrap;
+    text-align: center;
+    opacity: 80%;
+    padding: auto 10px;
+    background-color: white;
+}
+
+h2{
+    text-align: center;
+    width: 100%;
+}
+
+
+.bingo-card{
+    width: 600px;
+    height: 600px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: center;
+    row-gap: 0%;
+}
