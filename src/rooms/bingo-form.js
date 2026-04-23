@@ -3,11 +3,17 @@ import "./bingo-form.css";
 import { useState } from "react";
 import BingoOptions from "./bingo-options";
 
+const minTiles = {
+  3: 9,
+  4: 16,
+  5: 24,
+};
+
 const BingoForm = ({ setMainForm }) => {
   const [formData, setFormData] = useState({
     name: "",
     gridSize: "3",
-    description: [],
+    tiles: [],
     fontColor: "#000000",
     backgroundImage: null,
   });
@@ -44,7 +50,25 @@ const BingoForm = ({ setMainForm }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setMainForm({ ...formData, description: tileOptions === "Custom" ? formData.description : Array.from({ length: 100 }, (_, index) => index + 1) });
+
+    const noTiles = minTiles[formData.gridSize];
+    const sourceTiles =
+      tileOptions === "Custom"
+        ? formData.tiles
+        : Array.from({ length: 100 }, (_, index) => index + 1);
+    if (noTiles > sourceTiles.length) {
+      alert(
+        `At least ${noTiles} tiles needed! You only have ${sourceTiles.length}`,
+      );
+      return;
+    }
+    const shuffled = [...sourceTiles]; // clone to avoid mutating formData.tiles
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    const selected = shuffled.slice(0, noTiles);
+    setMainForm({ ...formData, tiles: selected });
   };
 
   return (
@@ -103,8 +127,7 @@ const BingoForm = ({ setMainForm }) => {
                   padding: "8px 12px",
                   border: "2px solid",
                   borderColor: tileOptions === option ? "blue" : "gray",
-                  background:
-                    tileOptions === option ? "lightblue" : "white",
+                  background: tileOptions === option ? "lightblue" : "white",
                   cursor: "pointer",
                 }}
               >

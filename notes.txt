@@ -1,0 +1,39 @@
+Logic:
+
+Create Game:
+
+
+
+Join Game:
+After inputting name, and joining the room. 
+If the room has reached max capacity, throw an error
+If the room is currently in a game (GAME_IN_PROGRESS) 
+Then put them in the room without the bingo card and show them the message
+"Game in Progress, Please Wait", I think a state "isInGame" would help
+
+Start Game:
+Get all the people that joined set them to JOINED_GAME
+Generate for them 5x5 boards
+Send it back for them to check
+Display the board and bingo button.
+
+Draw Number:
+Number is broadcast to all in game players 
+select * from users where playerstate = JOINED_GAME.
+
+Bingo Called:
+Show the user that called bingo, 
+then have the server verify in 5 seconds.
+
+Game End:
+Display the winner for 10 seconds on screen.
+If user is NOT in game, the show them then update them with playerState = JOINED_GAME
+Players return to the player list and only the host has a start game button.
+
+Host Disconnected:
+Show that host is disconnected and that they have to return to main page
+
+
+
+
+

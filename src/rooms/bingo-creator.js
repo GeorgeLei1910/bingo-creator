@@ -13,7 +13,7 @@ const BingoCreator = ({ setMainForm }) => {
       <Header></Header>
       <div class="bingo-creator">
         <BingoForm setMainForm={setFormData}></BingoForm>
-        {formData.description && <BingoCard formData={formData}></BingoCard>}
+        {formData.tiles?.length > 0 && <BingoCard formData={formData}></BingoCard>}
       </div>
     </div>
   );
